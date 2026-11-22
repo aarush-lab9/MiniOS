@@ -57,20 +57,32 @@ function appendToTerminal(rawText, isUserInput = false, isStepBanner = false) {
 
 function setStatus(text, isBusy = false) {
   if (!statusBadge) return;
-  statusBadge.innerText = "Status: " + text;
-  if (isBusy) {
-    statusBadge.style.backgroundColor = "#fef3c7";
-    statusBadge.style.borderColor = "#fcd34d";
-    statusBadge.style.color = "#92400e";
-  } else {
-    statusBadge.style.backgroundColor = "#ecfdf5";
-    statusBadge.style.borderColor = "#a7f3d0";
-    statusBadge.style.color = "#065f46";
-  }
+  const dotColor = isBusy ? "#FF9500" : "#34C759";
+  statusBadge.innerHTML = `<span class="status-dot" style="background-color:${dotColor}"></span> ${text}`;
 }
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function switchTab(tabId) {
+  document.querySelectorAll(".seg-btn").forEach((btn) => {
+    btn.classList.remove("active");
+    btn.setAttribute("aria-selected", "false");
+  });
+  const activeBtn = document.getElementById("tabBtn-" + tabId);
+  if (activeBtn) {
+    activeBtn.classList.add("active");
+    activeBtn.setAttribute("aria-selected", "true");
+  }
+
+  document.querySelectorAll(".tab-pane").forEach((pane) => {
+    pane.classList.remove("active");
+  });
+  const activePane = document.getElementById("tab-" + tabId);
+  if (activePane) {
+    activePane.classList.add("active");
+  }
 }
 
 function toggleCard(header) {
@@ -965,14 +977,15 @@ async function toggleFullDemo() {
     isDemoRunning = false;
     fullDemoBtn.innerText = "Run Full Demo";
     fullDemoBtn.className = "btn btn-primary";
-    setStatus("Demo Stopped", false);
+    setStatus("System Ready", false);
     appendToTerminal('<span class="ansi-yellow">[Demo stopped by user]</span>');
+    switchTab("overview");
     return;
   }
 
   isDemoRunning = true;
   fullDemoBtn.innerText = "Stop Demo";
-  fullDemoBtn.className = "btn btn-danger";
+  fullDemoBtn.className = "btn btn-outline-danger";
 
   appendToTerminal('<span class="ansi-cyan">========================================================================\nStarting MiniOS Automated Demonstration (24 Steps)\nExecuting operations sequentially...\n========================================================================</span>');
 
@@ -981,7 +994,13 @@ async function toggleFullDemo() {
 
     const step = demoSteps[i];
     const stepNum = i + 1;
-    const progressText = `Step ${stepNum}/${demoSteps.length}: ${step.label}`;
+
+    // Dynamically switch to corresponding module tab
+    if (stepNum <= 14) switchTab("cpu");
+    else if (stepNum <= 20) switchTab("memory");
+    else if (stepNum <= 22) switchTab("sync");
+    else if (stepNum === 23) switchTab("paging");
+    else if (stepNum === 24) switchTab("disk");
 
     setStatus(`Step ${stepNum}/${demoSteps.length}`, true);
     if (terminalTitle) terminalTitle.innerText = `[Step ${stepNum}/24] ${step.label}`;
@@ -1000,13 +1019,14 @@ async function toggleFullDemo() {
 
   if (isDemoRunning) {
     appendToTerminal('<span class="ansi-green">========================================================================\nDemonstration Completed Successfully.\nAll 24 operations simulated across Process, CPU, Memory, Sync, Paging & Disk.\n========================================================================</span>');
-    setStatus("Ready", false);
+    setStatus("System Ready", false);
+    switchTab("overview");
   }
 
   isDemoRunning = false;
   fullDemoBtn.innerText = "Run Full Demo";
   fullDemoBtn.className = "btn btn-primary";
-  if (terminalTitle) terminalTitle.innerText = "MiniOS Console (Terminal Output)";
+  if (terminalTitle) terminalTitle.innerText = "minios-session — bash";
 }
 
 async function resetSession() {
