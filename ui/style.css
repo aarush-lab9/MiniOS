@@ -342,9 +342,19 @@ body {
 }
 
 .tile-icon {
-  font-size: 20px;
-  width: 32px;
-  text-align: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: #F0F7FF;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tile-icon svg {
+  display: block;
 }
 
 .tile-body {

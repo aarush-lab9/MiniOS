@@ -975,16 +975,16 @@ const demoSteps = [
 async function toggleFullDemo() {
   if (isDemoRunning) {
     isDemoRunning = false;
-    fullDemoBtn.innerText = "Run Full Demo";
+    fullDemoBtn.innerText = "Run Demonstration";
     fullDemoBtn.className = "btn btn-primary";
     setStatus("System Ready", false);
-    appendToTerminal('<span class="ansi-yellow">[Demo stopped by user]</span>');
+    appendToTerminal('<span class="ansi-yellow">[Demonstration paused by user]</span>');
     switchTab("overview");
     return;
   }
 
   isDemoRunning = true;
-  fullDemoBtn.innerText = "Stop Demo";
+  fullDemoBtn.innerText = "Stop Demonstration";
   fullDemoBtn.className = "btn btn-outline-danger";
 
   appendToTerminal('<span class="ansi-cyan">========================================================================\nStarting MiniOS Automated Demonstration (24 Steps)\nExecuting operations sequentially...\n========================================================================</span>');
@@ -1024,7 +1024,7 @@ async function toggleFullDemo() {
   }
 
   isDemoRunning = false;
-  fullDemoBtn.innerText = "Run Full Demo";
+  fullDemoBtn.innerText = "Run Demonstration";
   fullDemoBtn.className = "btn btn-primary";
   if (terminalTitle) terminalTitle.innerText = "minios-session — bash";
 }
@@ -1032,7 +1032,7 @@ async function toggleFullDemo() {
 async function resetSession() {
   if (isDemoRunning) {
     isDemoRunning = false;
-    fullDemoBtn.innerText = "Run Full Demo";
+    fullDemoBtn.innerText = "Run Demonstration";
     fullDemoBtn.className = "btn btn-primary";
   }
   setStatus("Restarting...", true);
