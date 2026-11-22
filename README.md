@@ -4,7 +4,7 @@ An interactive browser-based dashboard for testing and visualizing all MiniOS op
 
 ---
 
-## 🚀 How to Run the UI
+## How to Run the UI
 
 ### Step 1: Start the UI Server
 Open a terminal in the project directory and run:
@@ -18,11 +18,11 @@ python3 ui/app.py
 ### Step 2: Open in Browser
 Visit the following URL in Google Chrome, Safari, Firefox, or Edge:
 
-👉 **[http://127.0.0.1:5050](http://127.0.0.1:5050)**
+**[http://127.0.0.1:5050](http://127.0.0.1:5050)**
 
 ---
 
-## 🎯 Features in the UI
+## Features in the UI
 
 1. **Process Management**:
    - Add custom processes with Burst Time, Priority, and Arrival Time.

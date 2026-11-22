@@ -211,7 +211,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 def run():
     server = http.server.ThreadingHTTPServer(("127.0.0.1", PORT), RequestHandler)
     print("=" * 60)
-    print(f"🚀 MiniOS Web UI running at: http://127.0.0.1:{PORT}")
+    print(f"[MiniOS] Web UI running at: http://127.0.0.1:{PORT}")
     print("Open the URL in your browser to test MiniOS.")
     print("=" * 60)
     try:
