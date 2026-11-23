@@ -1,0 +1,37 @@
+[
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/disk.c -o build/disk.o",
+    "file": "src/disk.c"
+  },
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/main.c -o build/main.o",
+    "file": "src/main.c"
+  },
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/memory.c -o build/memory.o",
+    "file": "src/memory.c"
+  },
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/pager.c -o build/pager.o",
+    "file": "src/pager.c"
+  },
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/process.c -o build/process.o",
+    "file": "src/process.c"
+  },
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/scheduler.c -o build/scheduler.o",
+    "file": "src/scheduler.c"
+  },
+  {
+    "directory": "/Users/aarushdubey/Downloads/os_project",
+    "command": "/usr/bin/clang -Wall -Iinclude -c src/sync.c -o build/sync.o",
+    "file": "src/sync.c"
+  }
+]

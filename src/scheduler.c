@@ -1,8 +1,8 @@
 #include <stdio.h>                                 // Standard I/O library for formatted console printing (printf, snprintf)
 #include <string.h>                                // String and memory manipulation functions (memcpy, strlen)
 #include <limits.h>                                // System integer limits (INT_MAX for minimum search algorithms)
-#include "process.h"                               // Process management header defining PCB, ProcessState, process_table
-#include "scheduler.h"                             // Scheduler prototypes and Gantt chart rendering declarations
+#include "../include/process.h"                               // Process management header defining PCB, ProcessState, process_table
+#include "../include/scheduler.h"                             // Scheduler prototypes and Gantt chart rendering declarations
 
 #define RED     "\033[1;31m"                       // Bright Red: highlights errors and preemptions
 #define GREEN   "\033[1;32m"                       // Bright Green: highlights optimal results and completions
@@ -40,13 +40,13 @@ static void print_results(int *indices, int n, const char *algo_name) { // Forma
                process_table[idx].completion_time, // Timeline finish instant (CT)
                process_table[idx].turnaround_time, // Turnaround Time: TAT = CT - AT
                process_table[idx].waiting_time);   // Waiting Time: WT = TAT - BT
-        total_wt += process_table[idx].waiting_time; // Accumulate individual waiting time into total
-        total_tat += process_table[idx].turnaround_time; // Accumulate individual turnaround time into total
+        total_wt += (float)process_table[idx].waiting_time; // Accumulate individual waiting time into total
+        total_tat += (float)process_table[idx].turnaround_time; // Accumulate individual turnaround time into total
     }
     
     printf("────────────────────────────────────────────────────────────────────────\n"); // Dividing line
-    printf(YELLOW "Average Turnaround Time: %.2f\n" RESET, total_tat / n); // Print Mean System Residence Time
-    printf(YELLOW "Average Waiting Time   : %.2f\n\n" RESET, total_wt / n); // Print Mean Ready Queue Delay
+    printf(YELLOW "Average Turnaround Time: %.2f\n" RESET, total_tat / (float)n); // Print Mean System Residence Time
+    printf(YELLOW "Average Waiting Time   : %.2f\n\n" RESET, total_wt / (float)n); // Print Mean Ready Queue Delay
 }
 
 void print_gantt_chart(int *order, int *start_times, int *end_times, int count) { // Renders horizontal ASCII Gantt chart
@@ -472,56 +472,56 @@ void schedule_compare(void) {                      // Benchmarks all 5 scheduler
     schedule_fcfs();                               // Run FCFS
     n = get_active_indices(indices);               // Retrieve process count
     {                                              // Calculate metrics block
-        float tw = 0, tt = 0;                      // Accumulators
+        float tw = 0.0f, tt = 0.0f;                // Accumulators
         for (int i = 0; i < n; i++) {              // Sum metrics
-            tw += process_table[indices[i]].waiting_time; // Sum WT
-            tt += process_table[indices[i]].turnaround_time; // Sum TAT
+            tw += (float)process_table[indices[i]].waiting_time; // Sum WT
+            tt += (float)process_table[indices[i]].turnaround_time; // Sum TAT
         }
-        avg_wt[0] = tw / n; avg_tat[0] = tt / n;   // Compute averages
+        avg_wt[0] = tw / (float)n; avg_tat[0] = tt / (float)n; // Compute averages
     }
     
     memcpy(process_table, backup, sizeof(process_table)); // Benchmark 2: SJF - restore input state
     schedule_sjf();                                // Run SJF
     {                                              // Calculate metrics block
-        float tw = 0, tt = 0;                      // Accumulators
+        float tw = 0.0f, tt = 0.0f;                // Accumulators
         for (int i = 0; i < n; i++) {              // Sum metrics
-            tw += process_table[indices[i]].waiting_time; // Sum WT
-            tt += process_table[indices[i]].turnaround_time; // Sum TAT
+            tw += (float)process_table[indices[i]].waiting_time; // Sum WT
+            tt += (float)process_table[indices[i]].turnaround_time; // Sum TAT
         }
-        avg_wt[1] = tw / n; avg_tat[1] = tt / n;   // Compute averages
+        avg_wt[1] = tw / (float)n; avg_tat[1] = tt / (float)n; // Compute averages
     }
     
     memcpy(process_table, backup, sizeof(process_table)); // Benchmark 3: Round Robin - restore input state
     schedule_rr(2);                                // Run RR with quantum = 2
     {                                              // Calculate metrics block
-        float tw = 0, tt = 0;                      // Accumulators
+        float tw = 0.0f, tt = 0.0f;                // Accumulators
         for (int i = 0; i < n; i++) {              // Sum metrics
-            tw += process_table[indices[i]].waiting_time; // Sum WT
-            tt += process_table[indices[i]].turnaround_time; // Sum TAT
+            tw += (float)process_table[indices[i]].waiting_time; // Sum WT
+            tt += (float)process_table[indices[i]].turnaround_time; // Sum TAT
         }
-        avg_wt[2] = tw / n; avg_tat[2] = tt / n;   // Compute averages
+        avg_wt[2] = tw / (float)n; avg_tat[2] = tt / (float)n; // Compute averages
     }
     
     memcpy(process_table, backup, sizeof(process_table)); // Benchmark 4: Priority - restore input state
     schedule_priority();                           // Run Priority
     {                                              // Calculate metrics block
-        float tw = 0, tt = 0;                      // Accumulators
+        float tw = 0.0f, tt = 0.0f;                // Accumulators
         for (int i = 0; i < n; i++) {              // Sum metrics
-            tw += process_table[indices[i]].waiting_time; // Sum WT
-            tt += process_table[indices[i]].turnaround_time; // Sum TAT
+            tw += (float)process_table[indices[i]].waiting_time; // Sum WT
+            tt += (float)process_table[indices[i]].turnaround_time; // Sum TAT
         }
-        avg_wt[3] = tw / n; avg_tat[3] = tt / n;   // Compute averages
+        avg_wt[3] = tw / (float)n; avg_tat[3] = tt / (float)n; // Compute averages
     }
     
     memcpy(process_table, backup, sizeof(process_table)); // Benchmark 5: MLFQ - restore input state
     schedule_mlfq();                               // Run MLFQ
     {                                              // Calculate metrics block
-        float tw = 0, tt = 0;                      // Accumulators
+        float tw = 0.0f, tt = 0.0f;                // Accumulators
         for (int i = 0; i < n; i++) {              // Sum metrics
-            tw += process_table[indices[i]].waiting_time; // Sum WT
-            tt += process_table[indices[i]].turnaround_time; // Sum TAT
+            tw += (float)process_table[indices[i]].waiting_time; // Sum WT
+            tt += (float)process_table[indices[i]].turnaround_time; // Sum TAT
         }
-        avg_wt[4] = tw / n; avg_tat[4] = tt / n;   // Compute averages
+        avg_wt[4] = tw / (float)n; avg_tat[4] = tt / (float)n; // Compute averages
     }
     
     printf(CYAN "\n╔═══════════════════════════════════════════════════════╗\n"); // Summary table top border

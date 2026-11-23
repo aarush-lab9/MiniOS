@@ -1,7 +1,7 @@
 #include <stdio.h>                                 // Standard I/O library for formatted console printing (printf)
 #include <stdlib.h>                                // Standard library functions
 #include <string.h>                                // Memory copy and buffer functions (memcpy)
-#include "disk.h"                                  // Disk scheduling header defining DISK_SIZE, MAX_REQUESTS
+#include "../include/disk.h"                       // Disk scheduling header defining DISK_SIZE, MAX_REQUESTS
 
 #define RED     "\033[1;31m"                       // Bright Red: indicates long seek movements or errors
 #define GREEN   "\033[1;32m"                       // Bright Green: highlights optimal seek paths
@@ -83,7 +83,7 @@ void disk_scan(int *requests, int n, int head) {   // SCAN (Elevator) disk arm s
     printf("  Initial Head Position: %d  (moving towards higher end)\n\n", head); // Print initial head and direction
     
     int sorted[MAX_REQUESTS];                      // Local copy of request queue for sorting
-    memcpy(sorted, requests, n * sizeof(int));     // Copy input request array into local buffer
+    memcpy(sorted, requests, (size_t)n * sizeof(int)); // Copy input request array into local buffer
     for (int i = 0; i < n - 1; i++) {              // Sort cylinder requests in ascending numerical order
         for (int j = 0; j < n - i - 1; j++) {      // Inner bubble sort loop
             if (sorted[j] > sorted[j + 1]) {       // If previous cylinder is greater than next cylinder
@@ -129,7 +129,7 @@ void disk_cscan(int *requests, int n, int head) {  // Circular SCAN (C-SCAN) dis
     printf("  Initial Head Position: %d  (moving towards higher end)\n\n", head); // Print initial head and direction
     
     int sorted[MAX_REQUESTS];                      // Local copy of request queue for sorting
-    memcpy(sorted, requests, n * sizeof(int));     // Copy requests into local array
+    memcpy(sorted, requests, (size_t)n * sizeof(int)); // Copy requests into local array
     for (int i = 0; i < n - 1; i++) {              // Sort cylinder requests in ascending order
         for (int j = 0; j < n - i - 1; j++) {      // Bubble sort pass
             if (sorted[j] > sorted[j + 1]) {       // Swap if out of order

@@ -11,9 +11,12 @@ $(TARGET): $(SRC)
 clean:
 	rm -f $(TARGET)
 
+run: $(TARGET)
+	./$(TARGET)
+
 ui: $(TARGET)
 	@echo "Starting MiniOS Web UI..."
 	@python3 -m webbrowser "http://127.0.0.1:5050" 2>/dev/null &
 	@python3 ui/app.py
 
-.PHONY: all clean ui
+.PHONY: all clean run ui

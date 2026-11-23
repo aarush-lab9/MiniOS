@@ -1,7 +1,7 @@
 #include <stdio.h>                                 // Standard I/O library for formatted console output (printf)
 #include <stdlib.h>                                // Standard library for dynamic heap memory allocation (malloc, free)
 #include <string.h>                                // String manipulation functions (strcpy, strcmp, strncpy)
-#include "memory.h"                                // Memory subsystem header defining MemBlock, AllocPolicy, constants
+#include "../include/memory.h"                     // Memory subsystem header defining MemBlock, AllocPolicy, constants
 
 #define RED     "\033[1;31m"                       // Bright Red: highlights errors and allocation failures
 #define GREEN   "\033[1;32m"                       // Bright Green: highlights allocated memory blocks

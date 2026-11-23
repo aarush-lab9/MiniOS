@@ -1,6 +1,6 @@
 #include <stdio.h>                                 // Standard I/O library for formatted console printing
 #include <string.h>                                // String manipulation routines (memset, strncpy, strcmp)
-#include "process.h"                               // Process management header defining PCB, states, and prototypes
+#include "../include/process.h"                    // Process management header defining PCB, states, and prototypes
 
 #define RED     "\033[1;31m"                       // ANSI escape code: Bright Red for error messages
 #define GREEN   "\033[1;32m"                       // ANSI escape code: Bright Green for success confirmation

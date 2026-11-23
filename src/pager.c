@@ -1,6 +1,6 @@
 #include <stdio.h>                                 // Standard I/O library for formatted console printing (printf)
 #include <string.h>                                // String manipulation library
-#include "pager.h"                                 // Virtual memory paging header defining constants and prototypes
+#include "../include/pager.h"                      // Virtual memory paging header defining constants and prototypes
 
 #define RED     "\033[1;31m"                       // Bright Red: indicates a Page Fault (victim eviction required)
 #define GREEN   "\033[1;32m"                       // Bright Green: indicates a Page Hit (referenced page resident)
@@ -59,7 +59,7 @@ void page_replace_fifo(int frames, int *ref_string, int ref_len) { // First-In, 
     
     printf("─────────────────────────────────\n"); // Dividing line
     printf(YELLOW "Total Page Faults: %d / %d\n" RESET, faults, ref_len); // Print total faults against references
-    printf(YELLOW "Hit Ratio: %.2f%%\n\n" RESET, ((float)(ref_len - faults) / ref_len) * 100); // Print hit ratio %
+    printf(YELLOW "Hit Ratio: %.2f%%\n\n" RESET, ((float)(ref_len - faults) / (float)ref_len) * 100.0f); // Print hit ratio %
 }
 
 void page_replace_lru(int frames, int *ref_string, int ref_len) { // Least Recently Used (LRU) page replacement
@@ -108,7 +108,7 @@ void page_replace_lru(int frames, int *ref_string, int ref_len) { // Least Recen
     
     printf("─────────────────────────────────\n"); // Dividing line
     printf(YELLOW "Total Page Faults: %d / %d\n" RESET, faults, ref_len); // Output total fault statistics
-    printf(YELLOW "Hit Ratio: %.2f%%\n\n" RESET, ((float)(ref_len - faults) / ref_len) * 100); // Hit ratio %
+    printf(YELLOW "Hit Ratio: %.2f%%\n\n" RESET, ((float)(ref_len - faults) / (float)ref_len) * 100.0f); // Hit ratio %
 }
 
 void page_replace_optimal(int frames, int *ref_string, int ref_len) { // Bélády's Optimal page replacement algorithm
@@ -171,7 +171,7 @@ void page_replace_optimal(int frames, int *ref_string, int ref_len) { // Bélád
     
     printf("─────────────────────────────────\n"); // Dividing line
     printf(YELLOW "Total Page Faults: %d / %d\n" RESET, faults, ref_len); // Output total fault statistics
-    printf(YELLOW "Hit Ratio: %.2f%%\n\n" RESET, ((float)(ref_len - faults) / ref_len) * 100); // Hit ratio %
+    printf(YELLOW "Hit Ratio: %.2f%%\n\n" RESET, ((float)(ref_len - faults) / (float)ref_len) * 100.0f); // Hit ratio %
 }
 
 void page_replace_compare(int frames, int *ref_string, int ref_len) { // Benchmark FIFO vs LRU vs Optimal

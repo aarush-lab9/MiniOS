@@ -1,7 +1,7 @@
 #include <stdio.h>                                 // Standard I/O library for console interaction (printf, scanf)
 #include <stdlib.h>                                // Standard library functions
 #include <string.h>                                // String manipulation functions (strcmp, strcat, snprintf)
-#include "sync.h"                                  // Synchronization header defining constants and prototypes
+#include "../include/sync.h"                       // Synchronization header defining constants and prototypes
 
 #define RED     "\033[1;31m"                       // Bright Red: indicates blocked semaphore waits and unsafe states
 #define GREEN   "\033[1;32m"                       // Bright Green: indicates successful production and safe states

@@ -1,12 +1,12 @@
 #include <stdio.h>                                 // Standard C library header for formatted I/O (printf, fgets, sscanf, setvbuf)
 #include <stdlib.h>                                // Standard C library header for general utilities (atoi, system, exit)
 #include <string.h>                                // Standard C library header for string routines (strcmp, strtok, strlen)
-#include "process.h"                               // Process management header declaring PCB structures, states, and APIs
-#include "scheduler.h"                             // CPU scheduling header declaring algorithms, Gantt chart, and metrics
-#include "memory.h"                                // Memory management header declaring doubly-linked heap blocks and policies
-#include "sync.h"                                  // Synchronization header declaring semaphores and Banker's algorithm
-#include "pager.h"                                 // Virtual memory paging header declaring page replacement policies
-#include "disk.h"                                  // Secondary storage header declaring disk head scheduling algorithms
+#include "../include/process.h"                    // Process management header declaring PCB structures, states, and APIs
+#include "../include/scheduler.h"                  // CPU scheduling header declaring algorithms, Gantt chart, and metrics
+#include "../include/memory.h"                     // Memory management header declaring doubly-linked heap blocks and policies
+#include "../include/sync.h"                       // Synchronization header declaring semaphores and Banker's algorithm
+#include "../include/pager.h"                      // Virtual memory paging header declaring page replacement policies
+#include "../include/disk.h"                       // Secondary storage header declaring disk head scheduling algorithms
 
 #define COLOR_RED     "\033[1;31m"                 // ANSI Escape: Text color Red for error alerts and diagnostic messages
 #define COLOR_GREEN   "\033[1;32m"                 // ANSI Escape: Text color Green for success notifications and categories
