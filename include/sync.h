@@ -1,21 +1,11 @@
-#ifndef SYNC_H
-#define SYNC_H
+#ifndef SYNC_H                                 // Include guard: prevents multiple inclusion of synchronization header
+#define SYNC_H                                 // Define SYNC_H symbol
 
-// Size of the shared ring buffer in the bounded-buffer Producer-Consumer problem
-#define BUFFER_SIZE 5
+#define BUFFER_SIZE 5                          // Capacity of circular ring buffer in Producer-Consumer simulation
+#define MAX_RESOURCES 4                        // Maximum distinct resource types modeled in Banker's safety matrix
+#define MAX_SYNC_PROC 5                        // Maximum processes evaluated simultaneously in Banker's algorithm
 
-// Maximum number of resource classes in the Banker's deadlock safety algorithm
-#define MAX_RESOURCES 4
+void run_producer_consumer(void);              // Simulates bounded buffer synchronization using counting & mutex semaphores
+void run_bankers(void);                        // Simulates Banker's deadlock avoidance safety algorithm and safe sequence
 
-// Maximum number of concurrent processes evaluated in the Banker's safety matrix
-#define MAX_SYNC_PROC 5
-
-// Simulates the classic bounded-buffer Producer-Consumer synchronization problem
-// Uses counting semaphores (empty=5, full=0) and a binary semaphore (mutex=1) to prevent race conditions
-void run_producer_consumer(void);
-
-// Executes Edsger Dijkstra's Banker's Algorithm for deadlock avoidance
-// Verifies whether resource allocation remains in a safe state and calculates the safe sequence
-void run_bankers(void);
-
-#endif
+#endif                                         // End of include guard SYNC_H

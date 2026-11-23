@@ -1,41 +1,27 @@
-#ifndef MEMORY_H
-#define MEMORY_H
+#ifndef MEMORY_H                               // Include guard: prevents duplicate inclusion of memory interface
+#define MEMORY_H                               // Define MEMORY_H symbol
 
-// Total simulated physical memory arena capacity (1024 Megabytes)
-#define TOTAL_MEMORY 1024
+#define TOTAL_MEMORY 1024                      // Total physical memory arena size in Megabytes (1024 MB pool)
 
-// Memory Allocation Block (MemBlock): Node structure in the doubly-linked memory list
-typedef struct MemBlock {
-    int offset;                 // Starting byte/MB physical offset of this block in the 1024 MB arena
-    int size;                   // Total contiguous size of this memory block in Megabytes
-    int allocated;              // Partition occupancy flag: 1 = currently allocated, 0 = free hole
-    char process_name[16];      // Tag of the owning process if allocated, or empty string if free
-    struct MemBlock *next;      // Pointer to the adjacent memory block at a higher physical address
-    struct MemBlock *prev;      // Pointer to the adjacent memory block at a lower physical address
-} MemBlock;
+typedef struct MemBlock {                      // Memory partition node in bidirectional doubly-linked list
+    int offset;                                // Starting physical address offset in MB within the 1024 MB arena
+    int size;                                  // Size of this contiguous memory partition in Megabytes
+    int allocated;                             // Allocation status flag: 1 = occupied by process, 0 = free hole
+    char process_name[16];                     // Name of the occupying process, or empty string if unallocated
+    struct MemBlock *next;                     // Pointer to logically adjacent block at higher physical memory address
+    struct MemBlock *prev;                     // Pointer to logically adjacent block at lower physical memory address
+} MemBlock;                                    // Typedef alias for contiguous memory partition block
 
-// Dynamic memory allocation placement policies
-typedef enum {
-    FIRST_FIT,  // Scan from arena beginning and allocate the first free hole that is large enough
-    BEST_FIT,   // Search the entire arena to allocate the smallest hole that satisfies the request
-    WORST_FIT   // Search the entire arena and allocate from the largest available free hole
-} AllocPolicy;
+typedef enum {                                 // Dynamic contiguous partition allocation placement heuristic policies
+    FIRST_FIT,                                 // Allocate first free hole large enough from beginning of list
+    BEST_FIT,                                  // Allocate smallest free hole that satisfies the requested size
+    WORST_FIT                                  // Allocate largest free hole available to leave largest remaining split
+} AllocPolicy;                                 // Typedef alias for memory placement policy enum
 
-// Initializes the 1024 MB physical memory pool as a single unallocated contiguous hole
-void init_memory(void);
+void init_memory(void);                        // Initializes heap as single 1024 MB free unallocated partition
+int mem_allocate(const char *pname, int size, AllocPolicy policy); // Allocates partition; returns 0 on success, -1 on failure
+int mem_free(const char *pname);               // Frees partition owned by pname and merges adjacent free holes in O(1)
+void mem_status(void);                         // Visualizes partition map, hole fragmentation, and total allocation
+void cleanup_memory(void);                     // Releases all heap-allocated MemBlock nodes and reclaims system memory
 
-// Requests 'size' MB of contiguous memory for 'pname' using the specified placement policy
-// Returns 0 on successful allocation, or -1 if no contiguous free hole is large enough
-int mem_allocate(const char *pname, int size, AllocPolicy policy);
-
-// Releases all memory blocks owned by 'pname' and merges adjacent free blocks in O(1) time
-// Returns the number of blocks freed, or -1 if the process has no allocations
-int mem_free(const char *pname);
-
-// Visualizes the complete physical memory map showing allocated chunks, free holes, and fragmentation
-void mem_status(void);
-
-// Reclaims all dynamically allocated heap memory nodes and resets the arena
-void cleanup_memory(void);
-
-#endif
+#endif                                         // End of include guard MEMORY_H

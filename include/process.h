@@ -1,61 +1,39 @@
-#ifndef PROCESS_H
-#define PROCESS_H
+#ifndef PROCESS_H                              // Include guard: prevents duplicate definition of process types
+#define PROCESS_H                              // Define PROCESS_H macro symbol
 
-// Maximum number of concurrent processes supported in the Process Table
-#define MAX_PROCESSES 20
+#define MAX_PROCESSES 20                       // Maximum number of concurrent processes supported in Process Table
+#define MAX_NAME_LEN 16                        // Maximum character length for a process name string
 
-// Maximum length of a process tag/name string including null terminator
-#define MAX_NAME_LEN 16
+typedef enum {                                 // Enumeration defining the 5-state process lifecycle model
+    STATE_NEW,                                 // Initial state: Process Control Block allocated but unadmitted
+    STATE_READY,                               // In main memory ready queue waiting for CPU core allocation
+    STATE_RUNNING,                             // Currently occupying CPU and executing instructions
+    STATE_WAITING,                             // Blocked waiting for an I/O completion or synchronization event
+    STATE_TERMINATED                           // Execution finished; resources reclaimed pending table cleanup
+} ProcessState;                                // Typedef alias for process lifecycle state enumeration
 
-// Enumeration of the standard 5 operating system process lifecycle states
-typedef enum {
-    STATE_NEW,        // Initial instantiation: PCB allocated but not yet admitted to ready queue
-    STATE_READY,      // Resident in memory and prepared for CPU core dispatching
-    STATE_RUNNING,    // Currently executing instructions on the simulated processor
-    STATE_WAITING,    // Blocked awaiting an external synchronization event or I/O completion
-    STATE_TERMINATED  // Execution finished; PCB retained temporarily until reaped
-} ProcessState;
+typedef struct {                               // Process Control Block (PCB): Kernel metadata for an active job
+    int pid;                                   // Unique Process Identifier assigned sequentially by kernel
+    char name[MAX_NAME_LEN];                   // Human-readable process label (e.g., "P1", "P2")
+    int burst_time;                            // Total CPU execution duration required to complete (in ms)
+    int remaining_time;                        // Remaining CPU execution time needed (used in preemptive scheduling)
+    int arrival_time;                          // Simulation timestamp when process enters the READY state
+    int priority;                              // Static priority value (lower numerical integer = higher priority)
+    ProcessState state;                        // Current execution state in the 5-state lifecycle state machine
+    int waiting_time;                          // Total cumulative time spent waiting in READY queue (TAT - BT)
+    int turnaround_time;                       // Total elapsed time from arrival to completion (CT - AT)
+    int completion_time;                       // Simulation timeline timestamp at which process finishes
+    int is_active;                             // Table slot status flag: 1 if active/allocated, 0 if free/unused
+} PCB;                                         // Typedef alias for Process Control Block structure
 
-// Process Control Block (PCB): Core operating system metadata structure for an active job
-typedef struct {
-    int pid;                    // Unique Process Identifier assigned by the kernel (0 to MAX_PROCESSES - 1)
-    char name[MAX_NAME_LEN];    // Human-readable process tag (e.g., "P1", "P2")
-    int burst_time;             // Total processor execution demand required by the process (in ms)
-    int remaining_time;         // Remaining CPU time required to finish (decremented during preemptive scheduling)
-    int arrival_time;           // Timeline instant at which the process enters the ready queue
-    int priority;               // Static scheduling priority integer (lower numerical value = higher priority)
-    ProcessState state;         // Current lifecycle state of the process in the 5-state machine
-    int waiting_time;           // Cumulative duration spent sitting in the READY state awaiting dispatch
-    int turnaround_time;        // Total elapsed time from process arrival to final completion (CT - AT)
-    int completion_time;        // Simulation timeline instant at which process completes execution
-    int is_active;              // Allocation flag: 1 if this process table slot is occupied, 0 if free
-} PCB;
+extern PCB process_table[MAX_PROCESSES];       // Global array of Process Control Blocks (the system Process Table)
+extern int process_count;                      // Global integer tracking total active processes currently in table
 
-// Global process table array holding all resident Process Control Blocks
-extern PCB process_table[MAX_PROCESSES];
+void init_process_table(void);                 // Initializes process table, zeroing all slots and setting is_active=0
+int create_process(const char *name, int burst, int priority, int arrival); // Creates PCB, returns PID (>=0) or -1 if full
+int kill_process(int pid);                     // Terminates process by PID and reclaims slot; returns 0 on success
+void list_processes(void);                     // Prints tabular formatted summary of all resident processes
+const char* state_to_string(ProcessState s);   // Maps ProcessState enum value to human-readable string ("READY", etc.)
+void reset_scheduling_fields(void);            // Resets remaining_time to burst_time and clears WT, TAT, CT for fair runs
 
-// Counter tracking the current number of active processes in the system
-extern int process_count;
-
-// Initializes the process table by clearing memory and marking all slots inactive
-void init_process_table(void);
-
-// Instantiates a new process, allocates a PCB slot, and initializes attributes
-// Returns the assigned PID (>= 0) on success, or -1 if the table is saturated
-int create_process(const char *name, int burst, int priority, int arrival);
-
-// Terminates an active process by PID, frees its PCB slot, and updates process count
-// Returns 0 on successful termination, or -1 if PID is invalid or inactive
-int kill_process(int pid);
-
-// Formats and displays the active Process Table in tabular ANSI format
-void list_processes(void);
-
-// Converts a ProcessState enum value to a human-readable string representation
-const char* state_to_string(ProcessState s);
-
-// Restores remaining_time to burst_time and zeros all scheduling statistics (WT, TAT, CT)
-// Essential for benchmarking multiple scheduling algorithms under identical initial conditions
-void reset_scheduling_fields(void);
-
-#endif
+#endif                                         // End of include guard PROCESS_H

@@ -1,25 +1,13 @@
-#ifndef DISK_H
-#define DISK_H
+#ifndef DISK_H                                 // Include guard: prevents multiple inclusion of disk scheduling header
+#define DISK_H                                 // Define DISK_H symbol
 
-// Maximum number of pending I/O cylinder requests in the disk scheduling queue
-#define MAX_REQUESTS 30
+#define MAX_REQUESTS 30                        // Maximum pending I/O track requests stored in disk cylinder queue
+#define DISK_SIZE 200                          // Total track cylinder span of simulated hard drive (cylinders 0-199)
 
-// Physical geometry size of the simulated magnetic disk: 200 cylinders labeled 0 through 199
-#define DISK_SIZE 200
+void disk_fcfs(int *requests, int n, int head);      // Simulates First-Come First-Served disk arm track scheduling
+void disk_sstf(int *requests, int n, int head);      // Simulates Shortest Seek Time First greedy cylinder scheduling
+void disk_scan(int *requests, int n, int head);      // Simulates SCAN (Elevator) bidirectional sweep disk scheduling
+void disk_cscan(int *requests, int n, int head);     // Simulates Circular SCAN (C-SCAN) unidirectional sweep scheduling
+void disk_compare(int *requests, int n, int head);   // Evaluates and compares total head seek distance across algorithms
 
-// Simulates First-Come, First-Served (FCFS) disk arm scheduling in arrival order
-void disk_fcfs(int *requests, int n, int head);
-
-// Simulates Shortest Seek Time First (SSTF) disk scheduling by greedily servicing the closest cylinder
-void disk_sstf(int *requests, int n, int head);
-
-// Simulates SCAN (Elevator algorithm) disk scheduling by sweeping bidirectionally across disk bounds
-void disk_scan(int *requests, int n, int head);
-
-// Simulates Circular SCAN (C-SCAN) disk scheduling by sweeping in one direction with uniform return jumps
-void disk_cscan(int *requests, int n, int head);
-
-// Executes all four disk scheduling policies on the same request queue and outputs total head seek travel
-void disk_compare(int *requests, int n, int head);
-
-#endif
+#endif                                         // End of include guard DISK_H
